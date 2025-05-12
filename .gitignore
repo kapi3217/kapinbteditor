@@ -1,0 +1,11 @@
+input/
+output/
+px300/
+Build/
+data.dat
+kapinbteditor.exe
+NBTViewer.exe
+rename.sh
+temp.cpp
+temp.exe
+tempscript.py
