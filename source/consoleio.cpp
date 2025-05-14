@@ -21,8 +21,9 @@ void PrintArray(const vector<nbt::Tag> &tags) {
 void PrintTag(const nbt::Tag &tag) {
     if (tag.lvl > 512) cerr << "ERROR ";
     cout << tag.lvl << " " <<
-        TagTypeToString(tag.tagType) << " " <<
-        tag.description << " " <<
+        TagTypeToString(tag.tagType) << " ";
+    if (tag.tagType == 0x09) cout << TagTypeToString(tag.tagTypeInList) << " ";
+    cout << tag.description << " " <<
         tag.numOfElements << " " <<
         tag.value << " " <<
         ToHex(tag.rawData) << endl;

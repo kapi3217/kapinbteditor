@@ -12,29 +12,15 @@
                 "source/functions.cpp",
                 "source/tag_processing.cpp",
                 "source/image_processing.cpp",
+                "source/fileio.cpp",
                 
-                // // Zlib
-                // "source/lib/zlib/adler32.c",
-                // "source/lib/zlib/compress.c",
-                // "source/lib/zlib/crc32.c",
-                // "source/lib/zlib/deflate.c",
-                // "source/lib/zlib/gzclose.c",
-                // "source/lib/zlib/gzlib.c",
-                // "source/lib/zlib/gzread.c",
-                // "source/lib/zlib/gzwrite.c",
-                // "source/lib/zlib/infback.c",
-                // "source/lib/zlib/inffast.c",
-                // "source/lib/zlib/inflate.c",
-                // "source/lib/zlib/inftrees.c",
-                // "source/lib/zlib/trees.c",
-                // "source/lib/zlib/uncompr.c",
-                // "source/lib/zlib/zutil.c",
-
-                // Libraries
                 "-I", "source/lib",
-                // "-I", "source/lib/stb",
-                // "-I", "source/lib/zlib",
 
+                // "-I", "source/lib/stb",
+                "-I", "source/lib/zlib",
+
+                "-lz",
+                
                 "-o", "kapinbteditor"
             ],
             "group": {

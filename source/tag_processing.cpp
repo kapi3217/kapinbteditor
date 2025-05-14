@@ -15,8 +15,10 @@ using namespace kapi;
 void DataToTags(const vector<uint8_t> &data, vector<nbt::Tag> &tags) {
     string tempRaw, tempValue;
     int i = 0, len = data.size();
+    uint16_t lvl = 0;
+    nbt::Tag emptyTag;
     while (i < len) {
-        ParseTag(data, i, tags);
+        ParseTag(data, i, tags, false, 0x00, lvl);
     }
 }
 void TagsToData(vector<uint8_t> &data, const vector<nbt::Tag> &tags) {
@@ -28,18 +30,20 @@ void TagsToData(vector<uint8_t> &data, const vector<nbt::Tag> &tags) {
         }
     }
 }
-void ParseTag(const vector<uint8_t> &data, int &i, vector<nbt::Tag> &tags, bool isInList, uint8_t listType) {
-    uint16_t lvl;
-    if (tags.size() == 0) lvl = 0; else lvl = tags.back().lvl;
-    uint8_t tempType;
-    if (isInList) tempType = listType; else tempType = data.at(i);
-    i++;
+void ParseTag(const vector<uint8_t> &data, int &i, vector<nbt::Tag> &tags, bool isInList, uint8_t listType, uint16_t &lvl) {
     nbt::Tag tempTag;
-    tempTag.tagType = tempType;
-    if (tempType != 0x00) {
-        tempTag.description = ReadString(data, i);
+    if (isInList) {
+        tempTag.tagType = listType;
     }
-    switch (tempType) {
+    else {
+        tempTag.tagType = data.at(i);
+        i++;
+        if (tempTag.tagType != 0x00) {
+            tempTag.description = ReadString(data, i);
+        }
+    }
+    tempTag.lvl = lvl;
+    switch (tempTag.tagType) {
         case 0x00: { // Stack pop
             lvl--;
             tempTag.numOfElements = 0;
@@ -82,29 +86,42 @@ void ParseTag(const vector<uint8_t> &data, int &i, vector<nbt::Tag> &tags, bool 
         }
         case 0x08: { // String
             tempTag.value = ReadString(data, i);
-            tempTag.rawData.insert(tempTag.rawData.end(), data.begin() + i, data.begin() + i + tempTag.value.length());
+            tempTag.rawData.insert(tempTag.rawData.end(), tempTag.value.begin(), tempTag.value.end());
             break;
         }
         case 0x09: { // Tag array
             uint8_t tempChar = data.at(i);
             i++;
-            lvl++;
             int tempInt = GetIntOnly(data, i);
+            tempTag.tagTypeInList = tempChar;
+            tempTag.numOfElements = tempInt;
+            tags.push_back(tempTag);
+            lvl++;
             if (tempInt != 0) {
                 if (tempChar != 0x00) {
                     for (int j = 0; j < tempInt; j++) {
-                        nbt::Tag newTag;
-                        newTag.lvl = lvl;
-                        // Will be done later when I find a good example
-                        ParseTag(data, i, tags, true, tempChar);
+                        ParseTag(data, i, tags, true, tempChar, lvl);
                     }
                 }
+                else cerr << "\nwtf\n";
             }
             lvl--;
             break;
         }
         case 0x0a: { // Compound tag
+            tempTag.lvl = lvl;
+            tags.push_back(tempTag);
             lvl++;
+            while (data.at(i) != 0x00) {
+                ParseTag(data, i, tags, false, 0, lvl);
+            }
+            nbt::Tag newTag;
+            lvl--;
+            i++;
+            newTag.lvl = lvl;
+            newTag.numOfElements = 0;
+            newTag.tagType = 0x00;
+            tags.push_back(newTag);
             break;
         }
         case 0x0b: { // Int array
@@ -128,6 +145,8 @@ void ParseTag(const vector<uint8_t> &data, int &i, vector<nbt::Tag> &tags, bool 
             break;
         }
     }
-    tempTag.lvl = lvl;
-    tags.push_back(tempTag);
+    if (tempTag.tagType != 0x09 && tempTag.tagType != 0x0A) {
+        tempTag.lvl = lvl;
+        tags.push_back(tempTag);
+    }
 }

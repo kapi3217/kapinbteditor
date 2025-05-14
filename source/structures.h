@@ -7,12 +7,13 @@ using namespace std;
 
 namespace nbt {
     struct Tag {
-        uint8_t tagType;
-        uint16_t lvl;
-        uint32_t numOfElements = 1;
-        string description = "";
-        vector<uint8_t> rawData;
-        string value = "";
+        uint8_t tagType; // Type of the tag
+        uint8_t tagTypeInList = 0xFF; // Represents type of the tag array, equal to 0xFF if tagType != 0x09
+        uint16_t lvl; // Level of matryoshka
+        uint32_t numOfElements = 1; // 0 for empty tag, variable for arrays, 1 for other types
+        string description = ""; // Tag description
+        vector<uint8_t> rawData; // Sequence of bytes
+        string value = ""; // Value that will be printed through streams
     };
     struct BlockInfo {
         string fileName;
@@ -38,7 +39,7 @@ namespace nbt {
 /*
 Схема:
 - загрузить в память файл с информацией о всех блоках
-- разархивировать схематику
+- разархивировать схематику (если ещё нет)
 - распарсить схематику
 - определить, какие блоки имеются в схематике
 - создать 3D-структуру блоков
@@ -51,8 +52,4 @@ namespace nbt {
 - постепенно (для оптимизации) убирать те блоки которые больше не будут использоваться
 - сохранить рендер в файл
 - удалить массив с рендером и блоками
-*/
-
-/*
-adler32.c compress.c crc32.c deflate.c gzclose.c gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c trees.c uncompr.c zutil.c
 */

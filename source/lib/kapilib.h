@@ -41,6 +41,12 @@ namespace kapi {
 #ifndef KAPI_IMPLEMENTED
 #define KAPI_IMPLEMENTED
 
+#ifdef _WIN32
+#define вперёд_славяне system("chcp 65001 > nul");
+#else
+#define вперёд_славяне
+#endif
+
 namespace kapi {
     inline string GetUsername() {
         #ifdef _WIN32

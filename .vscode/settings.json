@@ -64,6 +64,9 @@
     "iostream": "cpp",
     "iosfwd": "cpp",
     "cstring": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "cstdint": "cpp",
+    "string": "cpp",
+    "format": "cpp"
   }
 }
