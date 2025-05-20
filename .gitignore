@@ -1,0 +1,9 @@
+input/
+output/
+px300/
+Build/
+temp/
+x64/
+x86/
+.vs/
+.vs/kapinbteditor/v17
