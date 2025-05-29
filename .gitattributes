@@ -1,2 +1,2 @@
-source/lib/stb/*
-source/lib/zlib/*
+source/lib/stb/** linguist-vendored
+source/lib/zlib/** linguist-vendored
