@@ -12,6 +12,7 @@ This program is designed to:
 - [stb](https://github.com/nothings/stb) — public domain / MIT licensed single-file libraries:
   - `stb_image.h`
   - `stb_image_write.h`
+  - `stb_image_resize2.h`
 - [kapilib.h](https://github.com/kapi3217/kapinbteditor/blob/main/source/lib/kapilib.h) - just a single header file that content some useful functions, maybe sometimes it will be in its own repository
   
 These libraries are included in `source/lib`.
